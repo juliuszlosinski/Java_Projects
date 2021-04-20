@@ -1,0 +1,722 @@
+package All;
+
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.Timer;
+
+public class Tester {
+	//REGION: METHODS
+	public static void main(String[]inputs) {
+		new Game();
+	}
+	//END REGION
+}
+
+class Game extends JFrame
+{
+	//REGION: METHODS
+	public Game()
+	{
+		Dimension size=new Dimension(500,500);
+		setSize(size);
+		setMaximumSize(size);
+		setResizable(false);
+		setTitle("Little game");
+		setLocationRelativeTo(null);
+		
+		add(new Scene());
+		
+		setVisible(true);
+	}
+	//END REGION
+}
+
+class Scene extends JPanel
+{
+	private static final long serialVersionUID = 1L;
+	
+	/*   
+	[0,0]  |  [1,1]  | [2,2]
+	----------------------------
+	[3,3]  |  [4,4]  | [5,5]
+	----------------------------
+	[6,6]  |  [7,7]  | [8,8]
+	 */
+	
+	//REGION: FIELDS
+	int[]centers_X= 
+	{
+				86,255,420,86,255,420,86,255,420
+	};
+	int[]centers_Y= 
+	{
+				88,88,88,256,256,256,417,417,417
+	};
+	boolean[]visitedSpots=
+	{
+			false,false,false,false,false,false,false,false,false
+	};
+	boolean[]visitedByCross=
+	{
+			false,false,false,false,false,false,false,false,false
+	};
+	boolean[]visitedByCircle= 
+	{
+			false,false,false,false,false,false,false,false,false
+	};
+	int turnOfPlay=1;
+	int textPosX=160;
+	int textPosY=250;
+	List<ImageBase>gameObjects;
+	List<ImageBase>gameObjects_labels;
+	//END REGION
+	
+	//REGION: CONSTRUCTORS
+	public Scene()
+	{
+		gameObjects_labels=new List<ImageBase>();
+		Restart();
+		addMouseListener(mouseHandler);
+	}
+	//END REGION
+	
+	//REGION: GAME LOOP || GAME HEART AREA
+	private int gameLoopDelay=1;
+	ActionListener gameLoopOperations=new ActionListener() 
+	{
+		@Override
+		public void actionPerformed(ActionEvent source)
+		{
+			Render();
+		}
+	};
+	Timer gameLoop=new Timer(gameLoopDelay,gameLoopOperations);
+	//END REGION
+	
+	//REGION: PRINT LABELS
+	void ResetGameObjectLabels() 
+	{
+		gameObjects_labels=new List<ImageBase>();
+	}
+	
+	Timer printWinnerDelay=new Timer(1000,new ActionListener() {
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			ResetGameObjectLabels();
+			printWinnerDelay.stop();
+		}
+	});
+	//END REGION
+	
+	//REGION: MOUSE HANDLER
+	MouseListener mouseHandler=new MouseListener() 
+	{
+
+		@Override
+		public void mousePressed(MouseEvent evt)
+		{
+			int posX=evt.getPoint().x;
+			int posY=evt.getPoint().y;
+			
+			if(posX> 0 && posX<166 && posY> 0 && posY< 177) 
+			{
+				if(visitedSpots[0]==false)
+				{
+					if(turnOfPlay%2==0) 
+					{
+						gameObjects.Add(new Cross(centers_X[0],centers_Y[0]));
+						visitedByCross[0]=true;
+					}
+					else
+					{
+						gameObjects.Add(new Circle(centers_X[0],centers_Y[0]));
+						visitedByCircle[0]=true;
+					}
+					visitedSpots[0]=true;
+					turnOfPlay++;
+				}
+			}
+			else if(posX> 166 && posX<322 && posY>0 && posY<177) 
+			{
+				if(visitedSpots[1]==false)
+				{
+					if(turnOfPlay%2==0) 
+					{
+						gameObjects.Add(new Cross(centers_X[1],centers_Y[1]));
+						visitedByCross[1]=true;
+					}
+					else
+					{
+						gameObjects.Add(new Circle(centers_X[1],centers_Y[1]));
+						visitedByCircle[1]=true;
+					}
+					visitedSpots[1]=true;
+					turnOfPlay++;
+				}
+			}
+			else if(posX>322 && posX<500 && posY>0 && posY<177) 
+			{
+				if(visitedSpots[2]==false)
+				{
+					if(turnOfPlay%2==0) 
+					{
+						gameObjects.Add(new Cross(centers_X[2],centers_Y[2]));
+						visitedByCross[2]=true;
+					}
+					else
+					{
+						gameObjects.Add(new Circle(centers_X[2],centers_Y[2]));
+						visitedByCircle[2]=true;
+					}
+					visitedSpots[2]=true;
+					turnOfPlay++;
+				}
+			}
+			else if(posX>0 && posX<166 && posY> 177 && posY<330) 
+			{
+				if(visitedSpots[3]==false)
+				{
+					if(turnOfPlay%2==0) 
+					{
+						gameObjects.Add(new Cross(centers_X[3],centers_Y[3]));
+						visitedByCross[3]=true;
+					}
+					else
+					{
+						gameObjects.Add(new Circle(centers_X[3],centers_Y[3]));
+						visitedByCircle[3]=true;
+					}
+					visitedSpots[3]=true;
+					turnOfPlay++;
+				}
+			}
+			else if(posX>166 && posX<332 && posY> 177 && posY<330) 
+			{
+				if(visitedSpots[4]==false)
+				{
+					if(turnOfPlay%2==0) 
+					{
+						gameObjects.Add(new Cross(centers_X[4],centers_Y[4]));
+						visitedByCross[4]=true;
+					}
+					else
+					{
+						gameObjects.Add(new Circle(centers_X[4],centers_Y[4]));
+						visitedByCircle[4]=true;
+					}
+					visitedSpots[4]=true;
+					turnOfPlay++;
+				}
+			}
+			else if(posX>332 && posX<500 && posY> 177 && posY<330) 
+			{
+				if(visitedSpots[5]==false)
+				{
+					if(turnOfPlay%2==0) 
+					{
+						gameObjects.Add(new Cross(centers_X[5],centers_Y[5]));
+						visitedByCross[5]=true;
+					}
+					else
+					{
+						gameObjects.Add(new Circle(centers_X[5],centers_Y[5]));
+						visitedByCircle[5]=true;
+					}
+					visitedSpots[5]=true;
+					turnOfPlay++;
+				}
+			}
+			else if(posX>0 && posX<166 && posY>341 && posY<500) 
+			{
+				if(visitedSpots[6]==false)
+				{
+					if(turnOfPlay%2==0) 
+					{
+						gameObjects.Add(new Cross(centers_X[6],centers_Y[6]));
+						visitedByCross[6]=true;
+					}
+					else
+					{
+						gameObjects.Add(new Circle(centers_X[6],centers_Y[6]));
+						visitedByCircle[6]=true;
+					}
+					visitedSpots[6]=true;
+					turnOfPlay++;
+				}
+			}
+			else if(posX>166 && posX<332 && posY>341 && posY<500) 
+			{
+				if(visitedSpots[7]==false)
+				{
+					if(turnOfPlay%2==0) 
+					{
+						gameObjects.Add(new Cross(centers_X[7],centers_Y[7]));
+						visitedByCross[7]=true;
+					}
+					else
+					{
+						gameObjects.Add(new Circle(centers_X[7],centers_Y[7]));
+						visitedByCircle[7]=true;
+					}
+					visitedSpots[7]=true;
+					turnOfPlay++;
+				}
+			}
+			else if(posX>332 && posX<500 && posY>341 && posY<500) 
+			{
+				if(visitedSpots[8]==false)
+				{
+					if(turnOfPlay%2==0) 
+					{
+						gameObjects.Add(new Cross(centers_X[8],centers_Y[8]));
+						visitedByCross[8]=true;
+					}
+					else
+					{
+						gameObjects.Add(new Circle(centers_X[8],centers_Y[8]));
+						visitedByCircle[8]=true;
+					}
+					visitedSpots[8]=true;
+					turnOfPlay++;
+				}
+			}
+			CheckWhoWins();
+			}
+		@Override
+		public void mouseClicked(MouseEvent arg0) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void mouseEntered(MouseEvent arg0) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void mouseExited(MouseEvent arg0) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void mouseReleased(MouseEvent arg0) {
+			
+		}
+		
+	};
+	//END REGION
+	
+	//REGION: METHODS
+	
+	//REGION: DISPLAYING GRAPHICS
+	private void Render() 
+	{
+		super.revalidate();
+		super.repaint();
+	}
+	
+	@Override
+	public void paintComponent(Graphics g) 
+	{
+		super.paintComponent(g);
+		for(int i=0;i<gameObjects.Count();i++) {
+			gameObjects.GetItemByIndex(i).Draw(g);
+		}
+		for(int i=0;i<gameObjects_labels.Count();i++) {
+			gameObjects_labels.GetItemByIndex(i).Draw(g);
+		}
+		g.dispose();
+	}
+	//END REGION
+	
+	private void CheckWhoWins() 
+	{
+		if(turnOfPlay>9)
+		{
+			gameObjects_labels.Add(new Label("Draw!",textPosX,textPosY));
+			printWinnerDelay.start();
+			Restart();
+		}
+		else 
+		{
+			if(turnOfPlay%2==0) 
+			{
+				if(visitedByCross[0]&&visitedByCross[4]&&visitedByCross[8])
+				{
+					gameObjects_labels.Add(new Label("Cross wins!",textPosX,textPosY));
+					printWinnerDelay.start();
+					Restart();
+				}
+				else if(visitedByCross[0]&&visitedByCross[3]&&visitedByCross[6]) 
+				{
+					gameObjects_labels.Add(new Label("Cross wins!",textPosX,textPosY));
+					printWinnerDelay.start();
+					Restart();
+				}
+				else if(visitedByCross[1]&&visitedByCross[4]&&visitedByCross[7]) 
+				{
+					gameObjects_labels.Add(new Label("Cross wins!",textPosX,textPosY));
+					printWinnerDelay.start();
+					Restart();
+				}
+				else if(visitedByCross[2]&&visitedByCross[5]&&visitedByCross[8]) 
+				{
+					gameObjects_labels.Add(new Label("Cross wins!",textPosX,textPosY));
+					printWinnerDelay.start();
+					Restart();
+				}
+				else if(visitedByCross[0]&&visitedByCross[1]&&visitedByCross[2]) 
+				{
+					gameObjects_labels.Add(new Label("Cross wins!",textPosX,textPosY));
+					printWinnerDelay.start();
+					Restart();
+				}
+				else if(visitedByCross[3]&&visitedByCross[4]&&visitedByCross[5]) 
+				{
+					gameObjects_labels.Add(new Label("Cross wins!",textPosX,textPosY));
+					printWinnerDelay.start();
+					Restart();
+				}
+				else if(visitedByCross[6]&&visitedByCross[7]&&visitedByCross[8]) 
+				{
+					gameObjects_labels.Add(new Label("Cross wins!",textPosX,textPosY));
+					printWinnerDelay.start();
+					Restart();
+				}
+				else if(visitedByCross[2]&&visitedByCross[4]&&visitedByCross[6]) 
+				{
+					gameObjects_labels.Add(new Label("Cross wins!",textPosX,textPosY));
+					printWinnerDelay.start();
+					Restart();
+				}
+			}
+			else
+			{
+				if(visitedByCircle[0]&&visitedByCircle[4]&&visitedByCircle[8])
+				{
+					gameObjects_labels.Add(new Label("Circle wins!",textPosX,textPosY));
+					printWinnerDelay.start();
+					Restart();
+				}
+				else if(visitedByCircle[0]&&visitedByCircle[3]&&visitedByCircle[6]) 
+				{
+					gameObjects_labels.Add(new Label("Circle wins!",textPosX,textPosY));
+					printWinnerDelay.start();
+					Restart();
+				}
+				else if(visitedByCircle[1]&&visitedByCircle[4]&&visitedByCircle[7]) 
+				{
+					gameObjects_labels.Add(new Label("Circle wins!",textPosX,textPosY));
+					printWinnerDelay.start();
+					Restart();
+				}
+				else if(visitedByCircle[2]&&visitedByCircle[5]&&visitedByCircle[8]) 
+				{
+					gameObjects_labels.Add(new Label("Circle wins!",textPosX,textPosY));
+					printWinnerDelay.start();
+					Restart();
+				}
+				else if(visitedByCircle[0]&&visitedByCircle[1]&&visitedByCircle[2]) 
+				{
+					gameObjects_labels.Add(new Label("Circle wins!",textPosX,textPosY));
+					printWinnerDelay.start();
+					Restart();
+				}
+				else if(visitedByCircle[3]&&visitedByCircle[4]&&visitedByCircle[5]) 
+				{
+					gameObjects_labels.Add(new Label("Circle wins!",textPosX,textPosY));
+					printWinnerDelay.start();
+					Restart();
+				}
+				else if(visitedByCircle[6]&&visitedByCircle[7]&&visitedByCircle[8]) 
+				{
+					gameObjects_labels.Add(new Label("Circle wins!",textPosX,textPosY));
+					printWinnerDelay.start();
+					Restart();
+				}
+				else if(visitedByCircle[2]&&visitedByCircle[4]&&visitedByCircle[6]) 
+				{
+					gameObjects_labels.Add(new Label("Circle wins!",textPosX,textPosY));
+					printWinnerDelay.start();
+					Restart();
+				}
+			}
+		}
+	}
+	
+	private void Restart() 
+	{
+		gameLoop.restart();
+		gameObjects=new List<ImageBase>();
+		gameObjects.Add(new Background());
+		for(int i=0;i<visitedSpots.length;i++) 
+		{
+			visitedSpots[i]=false;
+			visitedByCross[i]=false;
+			visitedByCircle[i]=false;
+		}
+		turnOfPlay=1;
+	}
+	
+	//END REGION
+}
+
+class Label extends ImageBase
+{
+	//REGION: FIELDS
+	private String label;
+	//END REGION
+	
+	//REGION: CONSTRUCTORS
+	public Label(String label, int posX,int posY) 
+	{
+		super(posX,posY);
+		this.label=label;
+	}
+	//END REGION
+	
+	//REGION: METHODS
+	@Override
+	public void Draw(Graphics g) 
+	{
+		g.setColor(Color.green);
+		g.setFont(new Font("calibri",20,50));
+		g.drawString(label, posX, posY);
+	}
+
+	@Override
+	public void Update(int posX, int posY) 
+	{
+		//Nothing required.
+	}
+	//END REGION
+}
+
+class Background extends ImageBase
+{
+	//REGION: METHODS
+	@Override
+	public void Draw(Graphics g)
+	{
+		g.setColor(Color.DARK_GRAY);
+		g.fillRect(0, 0,500,500);
+		g.setColor(Color.black);
+		g.drawLine(168, 0, 168, 500);
+		g.drawLine(338,0,338,500);
+		g.drawLine(0, 180, 500, 180);
+		g.drawLine(0, 340, 500, 340);
+	}
+
+	@Override
+	public void Update(int posX, int posY) 
+	{
+		//Nothing required.
+	}
+	//END REGION
+}
+
+class Circle extends ImageBase
+{
+	//REGION: INSTANCES AREA
+	//REGION: CONSTRUCTORS
+	public Circle(int posX,int posY)
+	{
+		this.posX=posX;
+		this.posY=posY;
+	}
+	//END REGION
+
+	//REGION: METHODS
+	@Override
+	public void Draw(Graphics g) 
+	{
+		int r=95;
+		int centerX=this.posX-(r/2);
+		int centerY=this.posY-(r/2);
+		g.setColor(Color.white);
+		g.drawOval(centerX, centerY, r, r);
+	}
+
+	@Override
+	public void Update(int posX, int posY)
+	{
+		this.posX=posX;
+		this.posY=posY;
+	}
+	//END REGION
+	//END REGION
+}
+
+class Cross extends ImageBase
+{
+	//REGION: CONSTRUCTORS
+	public Cross(int posX,int posY) 
+	{
+		super(posX,posY);
+	}
+	//END REGION
+	
+	//REGION: METHODS
+	@Override
+	public void Draw(Graphics g)
+	{
+		int delta=70;
+		
+		int f_p1x=posX-delta;
+		int f_p1y=posY-delta;
+		int f_p2x=posX+delta;
+		int f_p2y=posY+delta;
+		
+		int s_p1x=posX-delta;
+		int s_p1y=posY+delta;
+		int s_p2x=posX+delta;
+		int s_p2y=posY-delta;
+		
+		g.setColor(Color.red);
+		g.drawLine(f_p1x, f_p1y, f_p2x,f_p2y);
+		g.drawLine(s_p1x, s_p1y, s_p2x,s_p2y);
+	}
+
+	@Override
+	public void Update(int posX, int posY)
+	{
+		this.posX=posX;
+		this.posY=posY;
+	}
+	//END REGION
+}
+
+
+abstract class ImageBase
+{
+	//REGION: INSTANCES AREA FOR ANONYMOUS OBJECTS
+	//REGION: FIELDS
+	protected int posX;
+	protected int posY;
+	//END REGION
+	
+	//REGION: CONSTRUCTORS
+	public ImageBase() 
+	{
+		posX=0;
+		posY=0;
+	}
+	
+	public ImageBase(int posX,int posY) 
+	{
+		this.posX=posX;
+		this.posY=posY;
+	}
+	//END REGION
+	
+	//REGION: PROPOTIES
+	public int X() 
+	{
+		return posX;
+	}
+	
+	public int Y() 
+	{
+		return posY;
+	}
+	//END REGION
+	
+	//REGION: METHODS
+	abstract public void Draw(Graphics g);
+	abstract public void Update(int posX,int posY);
+	//END REGION
+	//END REGION
+}
+
+class List<T>
+{
+	//REGION: FIELDS
+	private T[]items;
+	private int n;
+	//END REGION
+	
+	//REGION: CONSTRUCTORS
+	public List() 
+	{
+		items=(T[])new Object[20];
+		n=0;
+	}
+	
+	public List(int capacity) 
+	{
+		items=(T[])new Object[capacity];
+		n=0;
+	}
+	//END REGION
+	
+	//REGION: PROPORTIES
+	public int Count() 
+	{
+		return n;
+	}
+	//END REGION
+	
+	//REGION: METHODS
+	public void Add(T item) 
+	{
+		if(n>=items.length)
+		{
+			Resize();
+		}
+		
+		items[n]=item;
+		n++;
+	}
+	
+	public T GetItemByIndex(int index) 
+	{
+		return items[index];
+	}
+	
+	private void Resize() 
+	{
+		T[]tmp=(T[])new Object[n*2];
+		
+		int i=0;
+		while(i<n)
+		{
+			tmp[i]=items[i];
+			i++;
+		}
+		
+		items=tmp;
+	}
+	
+	public void Clear() 
+	{
+		items=(T[])new Object[5];
+		n=0;
+	}
+	
+	@Override
+	public String toString() 
+	{
+		String result="";
+		int i=0;
+		while(i<n) 
+		{
+			result+="\n-------------"+(i+1)+"--------------]";
+			result+=items[i].toString();
+			result+="\n----------------------------]\n";
+			i++;
+		}
+		return result;
+	}
+	//END REGION
+}
